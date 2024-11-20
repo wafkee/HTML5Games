@@ -1,8 +1,75 @@
-<a href="/SubwaySF/">Subway Surfers: San Francisco</a>
-<a href="/SubwaySP/">Subway Surfers: Saint Petersburg </a>
-<a href="/FruitNinjaClassic/">Fruit Ninja Classic (2D)</a>
-<a href="/FruitNinja/">Fruit Ninja </a>
-<a href="/CutTheRope/">Cut The Rope </a>
-<a href="/JetpackJoyride/">Jetpack Joyride </a>
-<a href="/Eag1.8.html">Eaglercraft</a>
-<a href="/WAD">WADs (doom data)</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="Subway Surfers Classic game emulator">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Subway Surfers Classic</title>
+    <link rel="shortcut icon" href="/img/favicon.webp">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/core-game-site.css">
+    <link rel="stylesheet" href="/css/side-navigation.css">
+    <link rel="stylesheet" href="/css/skyscraper.css">
+
+    <style>
+        /* Ensure the HTML and body take up the full screen */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Make the iframe fill the entire screen */
+        #gameFrame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Emulation -->
+    <iframe id="gameFrame"
+            src="http://mafkee.github.io"
+            sandbox="allow-scripts allow-same-origin"
+            scrolling="no"
+            frameborder="0"></iframe>
+    <!-- End Emulation -->
+
+    <script>
+        // Listen for when the iframe's content requests pointer lock
+        var iframe = document.getElementById('gameFrame');
+
+        iframe.onload = function() {
+            // Once the iframe is loaded, listen for mouse click inside the iframe to request pointer lock
+            iframe.contentWindow.document.body.addEventListener('click', function() {
+                try {
+                    iframe.contentWindow.document.body.requestPointerLock();
+                } catch (e) {
+                    console.error('Pointer Lock request failed:', e);
+                }
+            });
+        };
+
+        // Listen for pointer lock change events on the document to detect lock/unlock state
+        document.addEventListener('pointerlockchange', function() {
+            if (document.pointerLockElement === iframe.contentWindow.document.body) {
+                console.log('Pointer lock activated');
+            } else {
+                console.log('Pointer lock released');
+            }
+        });
+
+        // Optional: Automatically handle pointer lock release on ESC key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.exitPointerLock();
+            }
+        }, false);
+    </script>
+</body>
+</html>
